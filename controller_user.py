@@ -24,7 +24,7 @@ def show():
 
 @controller_user.route('/login')
 def login():
-    return render_template("Login.html")
+    return render_template("login.html")
 
 
 @controller_user.route('/logout')
@@ -49,7 +49,7 @@ def do_login():
         return redirect(url_for("c4-log.index"))
     # 没有找到用户或密码错误
     else:
-        return render_template("Login.html", error="用户名或密码错误")
+        return render_template("login.html", error="用户名或密码错误")
 
 
 @controller_user.route('/register')
