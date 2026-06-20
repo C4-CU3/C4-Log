@@ -29,6 +29,13 @@ from controller_blog import controller_blog
 app.register_blueprint(controller_blog)
 
 
+
+# 根路径 / 自动跳转博客首页 /c4-log/
+@app.route('/')
+def root_redirect():
+    return redirect(url_for("c4-log.index"))
+
+
 # 解决打包后静态文件/模板路径问题
 def resource_path(relative_path):
     """获取打包后文件的绝对路径"""
