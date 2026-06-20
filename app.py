@@ -70,6 +70,11 @@ def inject_user_info():
     return {"now": datetime.now(), "is_login": is_login, "is_admin": is_admin}
 
 
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
 # 执行以下代码生成哈希并更新到user表
 from werkzeug.security import generate_password_hash
 new_pwd_hash = generate_password_hash("你的密码", method='pbkdf2:sha256')
