@@ -27,7 +27,13 @@ from controller_user import controller_user
 app.register_blueprint(controller_user)
 from controller_blog import controller_blog
 app.register_blueprint(controller_blog)
+app.register_blueprint(controller_user, url_prefix="/user")
+app.register_blueprint(controller_blog, url_prefix="/c4-log")
 
+
+@app.route("/")
+def home():
+    return redirect("/c4-log/")
 
 # 解决打包后静态文件/模板路径问题
 def resource_path(relative_path):
