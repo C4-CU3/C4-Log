@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block title %}编辑日志 - C4-log{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">编辑Log</h2>
+                <form action="{{url_for('c4-log.do_edit')}}" method="POST">
+                    <input type="hidden" name="id" value="{{blog[0]}}">
+                    <div class="mb-3">
+                        <label class="form-label">标题</label>
+                        <input type="text" name="title" class="form-control" value="{{blog[1]}}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">内容</label>
+                        <textarea name="content" rows="15" class="form-control" required>{{blog[2]}}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">保存修改</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

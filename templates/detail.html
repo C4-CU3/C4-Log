@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+{% block title %}{{ blog[1] }} - C4-log{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- 日志主体卡片 -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-3">{{ blog[1] }}</h1>
+                <p class="text-break">{{ blog[2] }}</p>
+            </div>
+        </div>
+        <!-- 【这里就是插入提示的完整区块】 -->
+        {% if session.get('uid') %}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h4 class="mb-3">发表评论</h4>
+                <form action="{{ url_for('c4-log.do_comment', blog_id=blog[0]) }}" method="POST">
+                    <textarea name="content" rows="4" class="form-control mb-3" placeholder="写下你的评论..." required></textarea>
+                    <button type="submit" class="btn btn-outline-primary">提交评论</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4 text-center text-muted">
+                <a href="{{ url_for('user.login') }}" class="link-primary">登录</a> 后可发表评论~
+            </div>
+        {% endif %}
+        <!-- 评论列表区域 -->
+        <h4 class="mb-3">评论列表</h4>
+        {% if comments %}
+            {% for comment in comments %}
+            <div class="card shadow-sm mb-3">
+                <div class="card-body p-3">
+                    <!-- 改动1：用户名跳转链接增加标识参数，标记从评论区进入 -->
+                    <a href="{{ url_for('user.other_profile', visit_uid=comment[4], from_comment=1) }}"
+                       class="fw-bold text-decoration-none" style="color:var(--bs-body-color);">
+                        {{ comment[3] }}
+                    </a>
+                    <span class="text-secondary small ms-2">{{ comment[2] }}</span>
+                    <p class="my-2">{{ comment[1] }}</p>
+                    {% if session.get('uid') and (comment[4] == session['uid'] or session['uid'] == 7) %}
+                    <div class="d-flex gap-2">
+                        <a href="{{ url_for('c4-log.edit_comment', comment_id=comment[0]) }}" class="btn btn-sm btn-warning">编辑</a>
+                        <a href="{{ url_for('c4-log.delete_comment', comment_id=comment[0]) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除这条评论吗？')">删除</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="card shadow-sm">
+                <div class="card-body text-center text-secondary py-4">
+                    暂无评论，快来抢沙发吧~
+                </div>
+            </div>
+        {% endif %}
+        <!-- 改动2：判断是否从评论区进入，控制按钮显示 -->
+        <div class="mt-4">
+            {% if request.args.get('from_comment') %}
+                <!-- 从评论区进入时：隐藏返回Log列表按钮，显示返回上一页（评论页）按钮 -->
+                <a href="javascript:history.back()" class="btn btn-secondary">← 返回评论页</a>
+            {% else %}
+                <!-- 正常进入时：显示原有返回Log列表按钮 -->
+                <a href="{{ url_for('c4-log.index') }}" class="btn btn-secondary">← 返回Log列表</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

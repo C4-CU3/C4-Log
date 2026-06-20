@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block title %}编辑评论 - C4-log{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">编辑评论</h2>
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+                <form action="{{ url_for('c4-log.edit_comment', comment_id=comment[0]) }}" method="POST">
+                    <textarea name="content" rows="4" class="form-control mb-3" required>{{ comment[3] }}</textarea>
+                    <button type="submit" class="btn btn-primary w-100">保存修改</button>
+                </form>
+                <a href="{{ url_for('c4-log.detail', blog_id=comment[1]) }}" class="btn btn-outline-secondary w-100 mt-3">返回Log详情</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

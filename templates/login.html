@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}用户登录 - C4-log{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm mt-4">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">用户登录</h2>
+
+                <!-- 错误提示 -->
+                {% if error %}
+                <div class="alert alert-danger text-center">
+                    {{ error }}
+                </div>
+                {% endif %}
+
+                <form action="{{ url_for('user.do_login') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">用户名</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="请输入用户名" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">密码</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">登录</button>
+                </form>
+
+                <div class="text-center mt-2">
+                    <a href="{{url_for('c4-log.forget_pwd')}}">忘记密码？</a>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('user.register') }}" class="text-decoration-none">没有账户？点击注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

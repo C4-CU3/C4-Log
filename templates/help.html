@@ -1,0 +1,201 @@
+{% extends 'layout.html' %}
+{% block title %}使用帮助 - C4-log博客系统{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">📖 C4-log 系统使用帮助</h4>
+                </div>
+                <div class="card-body">
+                    <!-- 导航目录 -->
+                    <div class="alert alert-light">
+                        <h5>目录</h5>
+                        <ol class="mb-0">
+                            <li><a href="#register">注册账号（邮箱验证码）</a></li>
+                            <li><a href="#login">登录与退出</a></li>
+                            <li><a href="#blog">发布博客与审核规则</a></li>
+                            <li><a href="#edit">编辑/删除日志权限说明</a></li>
+                            <li><a href="#admin">管理员专属功能</a></li>
+                            <li><a href="#search">搜索功能</a></li>
+                            <li><a href="#faq">常见问题FAQ</a></li>
+                            <li><a href="#safe">账号安全与数据说明</a></li> <!-- 新增目录 -->
+                        </ol>
+                    </div>
+
+                    <hr>
+                    <h5 id="register">1. 注册账号（邮箱验证码）</h5>
+                    <ul>
+                        <li>进入注册页面，填写用户名、常用邮箱、登录密码</li>
+                        <li>输入邮箱后点击【获取验证码】，系统会发送6位数字验证码至你的邮箱</li>
+                        <li>验证码有效期5分钟，超时需重新获取；收不到邮件请查看垃圾箱</li>
+                        <li>同一个邮箱仅能绑定一个账号，不可重复注册</li>
+                        <li>两次输入密码必须保持一致才能完成注册</li>
+                    </ul>
+
+                    <hr>
+                    <h5 id="login">2. 登录与退出</h5>
+                    <ul>
+                        <li>使用注册时填写的用户名+密码登录系统</li>
+                        <li>登录成功后顶部显示【新增log】按钮，游客无此按钮</li>
+                        <li>点击导航退出登录，清空登录状态，返回登录页</li>
+                        <li>登录状态默认保持7天，如需安全退出请手动点击【退出】</li> <!-- 新增 -->
+                    </ul>
+
+                    <hr>
+                    <h5 id="blog">3. 发布Log与审核规则</h5>
+                    <ul>
+                        <li>登录用户点击【新增log】可发布Log，填写标题与内容提交</li>
+                        <li>新发布Log默认标记【待审核】，普通用户、游客首页无法查看</li>
+                        <li>仅管理员可查看全部待审核、已审核Log</li>
+                        <li>管理员点击【通过审核】后，所有用户均可浏览该Log</li>
+                        <li>Log标签说明：
+                            <span class="badge bg-danger me-1">置顶</span> 管理员置顶Log
+                            <span class="badge bg-warning text-dark me-1">待审核</span> 未审核Log
+                            <span class="badge bg-info me-1">管理员</span> 管理员账号发布的Log
+                        </li>
+                        <li>审核周期：管理员会在1-2个工作日内完成审核，紧急Log可直接联系管理员</li> <!-- 新增 -->
+                    </ul>
+
+                    <hr>
+                    <h5 id="edit">4. 编辑/删除Log权限说明</h5>
+                    <ul>
+                        <li>普通用户：仅能编辑、删除自己发布的【待审核】Log</li>
+                        <li>普通用户已审核Log：无法自行修改删除，需联系管理员操作</li>
+                        <li>管理员：可编辑、删除全站所有用户Log，不受审核状态限制</li>
+                        <li>前端页面只会展示你有权限操作的编辑、删除按钮</li>
+                        <li>删除Log操作不可恢复，请谨慎点击；编辑后仍需重新审核（已审核Log）</li> <!-- 新增 -->
+                    </ul>
+
+                    <hr>
+                    <h5 id="admin">5. 管理员专属功能</h5>
+                    <ul>
+                        <li>首页可见全部待审核、已审核Log</li>
+                        <li>每条Log拥有：置顶/取消置顶、通过/撤销审核按钮</li>
+                        <li>顶部显示【用户管理】入口，可查看、删除全站注册用户</li>
+                        <li>可修改、删除任意用户发布的Log(并非何时都可以任意修改)</li>
+                        <li>可批量审核Log，支持按时间/用户筛选待审核内容</li> <!-- 新增 -->
+                        <li>可查看系统操作日志（用户注册、Log发布/审核记录）</li> <!-- 新增 -->
+                    </ul>
+
+                    <hr>
+                    <h5 id="search">6. 搜索功能</h5>
+                    <ul>
+                        <li>页面顶部搜索框输入关键词，可匹配Log标题、内容</li>
+                        <li>游客、普通用户仅搜索已审核Log；管理员可搜索全部Log</li>
+                        <li>支持模糊搜索，关键词长度建议≥2个字符，搜索结果按发布时间倒序展示</li> <!-- 新增 -->
+                        <li>可组合多个关键词搜索（空格分隔），精准定位目标Log</li> <!-- 新增 -->
+                    </ul>
+
+                    <hr>
+                    <h5 id="faq">7. 常见问题FAQ</h5>
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q1">
+                                    Q1：收不到邮箱验证码怎么办？
+                                </button>
+                            </h2>
+                            <div id="q1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    1. 检查邮箱垃圾箱，系统邮件常会被拦截；<br>
+                                    2. 确认输入邮箱无多余空格；<br>
+                                    3. 等待1分钟后重新点击获取验证码。
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2">
+                                    Q2：注册后看不到自己发布的日志？
+                                </button>
+                            </h2>
+                            <div id="q2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    新Log默认为待审核状态，需要管理员审核通过后，首页才会展示；管理员账号可直接查看。
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q3">
+                                    Q3：无法编辑已发布Log？
+                                </button>
+                            </h2>
+                            <div id="q3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Log一旦通过管理员审核，普通用户无修改权限，联系管理员撤销审核后即可编辑。
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 新增FAQ -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q4">
+                                    Q4：忘记登录密码如何找回？
+                                </button>
+                                <div id="q4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body">
+                                        登录页面点击「忘记密码」，输入注册邮箱，系统将发送30分钟有效的密码重置链接；点击邮件内链接即可设置新密码。链接超时需重新提交申请。
+                                    </div>
+                                </div>
+                            </h2>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q5">
+                                    Q5：管理员如何批量处理待审核Log？
+                                </button>
+                            </h2>
+                            <div id="q5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    管理员进入【待审核列表】页面，可勾选多条Log，点击【批量通过】或【批量驳回】按钮完成批量操作；驳回的Log会通知发布用户修改后重新提交。
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q6">
+                                    Q6：搜索结果为空但确定关键词存在？
+                                </button>
+                            </h2>
+                            <div id="q6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    1. 普通用户/游客仅能搜索已审核Log，若该Log未审核则无法检索；<br>
+                                    2. 检查关键词大小写（系统搜索不区分大小写）；<br>
+                                    3. 尝试简化关键词，避免特殊字符干扰。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 新增章节：账号安全与数据说明 -->
+                    <hr>
+                    <h5 id="safe">8. 账号安全与数据说明</h5>
+                    <ul>
+                        <li>账号安全：请勿将登录密码告知他人，建议定期更换密码；退出公共设备登录时务必点击【退出】</li>
+                        <li>数据存储：系统数据存储在本地SQLite数据库，管理员会定期备份，普通用户无数据导出权限</li>
+                        <li>内容规范：发布的Log不得包含违法、违规、色情、暴力等内容，否则管理员有权删除并封禁账号</li>
+                        <li>隐私说明：用户注册邮箱仅用于验证码发送和密码重置，不会向第三方泄露</li>
+                    </ul>
+
+                    <!-- 新增结尾提示 -->
+                    <hr>
+                    <div class="alert alert-info mt-4">
+                        <h6 class="mb-0">💡 温馨提示</h6>
+                        <p class="mb-1 mt-1">如有其他使用问题未在帮助中解决，可通过系统底部的联系方式联系管理员，工作时间内会及时回复。</p>
+                        <p class="mb-0">系统会不定期更新功能，使用帮助也会同步迭代，建议定期查看最新说明。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <a href="{{url_for('c4-log.index')}}" class="btn btn-outline-primary">返回首页</a>
+                <a href="{{url_for('c4-log.about')}}" class="btn btn-outline-secondary ms-2">了解系统详情</a> <!-- 新增跳转 -->
+            </div>
+        </div>
+    </div>
+</div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+{% block title %}{{ user[1] }} - 个人主页{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <!-- 居中核心容器 -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-11">
+            <!-- 用户基础卡片 -->
+            <div class="card shadow-sm mb-4 w-100">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">用户主页</h4>
+                </div>
+                <div class="card-body text-center">
+                    {% if user[4] %}
+                        <img src="{{ url_for('static', filename=user[4]) }}" class="rounded-circle" width="130" height="130" style="object-fit:cover;">
+                    {% else %}
+                        <div class="rounded-circle bg-secondary text-white d-inline-flex align-items-center justify-content-center fs-1" style="width:130px;height:130px;">
+                            {{ user[1][0] }}
+                        </div>
+                    {% endif %}
+                    <h3 class="mt-3">{{ user[1] }}</h3>
+                    <p class="text-secondary">ID：{{ user[0] }}</p>
+                    {% if user[3] == 1 %}
+                        <span class="badge bg-primary">管理员</span>
+                    {% else %}
+                        <span class="badge bg-secondary">普通用户</span>
+                    {% endif %}
+
+                    {% if is_friend %}
+                        <p class="mt-2 text-success">你们已是好友</p>
+                    {% else %}
+                        <!-- 非好友：展示添加好友按钮 -->
+                        <form action="{{ url_for('user.send_friend', target_uid=user[0]) }}" method="post" class="mt-3">
+                            <button class="btn btn-primary">添加好友</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 该用户发布的Log -->
+            <div class="card shadow-sm w-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">TA发布的Log（共 {{ blogs|length }} 篇）</h5>
+                </div>
+                <div class="card-body">
+                    {% if blogs %}
+                        {% for blog in blogs %}
+                        <div class="border rounded p-3 mb-3">
+                            <h5>
+                                <a href="{{ url_for('c4-log.detail', blog_id=blog[0]) }}" style="color:var(--bs-body-color);text-decoration:none;">
+                                    {{ blog[1] }}
+                                </a>
+                            </h5>
+                            <p class="text-secondary small">发布时间：{{ blog[3] if blog[3] else "暂无时间" }}</p>
+                            <p class="text-break">{{ blog[2]|truncate(120) }}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-center text-secondary py-4">该用户还没有发布Log</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                {% if request.args.get('from_comment') %}
+                    <!-- 从评论进入：返回log详情页 -->
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary">返回</a>
+                {% else %}
+                    <!-- 从好友页面进入：返回好友列表 -->
+                    <a href="{{ url_for('user.friend') }}" class="btn btn-outline-secondary">返回好友列表</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

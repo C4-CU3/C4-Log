@@ -1,0 +1,183 @@
+{% extends 'layout.html' %}
+{% block title %}个人资料 - C4-log{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <!-- 个人基础资料卡片 -->
+            <div class="card shadow-sm mb-5">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">👤 个人资料</h4>
+                </div>
+                <div class="card-body">
+                    {% if error %}
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        {{ error }}
+                        <button class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endif %}
+                    {% if msg %}
+                    <div class="alert alert-success alert-dismissible fade show">
+                        {{ msg }}
+                        <button class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endif %}
+                    <!-- 头像区域 -->
+                    <div class="text-center mb-4">
+                        {% if user[5] %}
+                            <img src="{{ url_for('static', filename=user[5]) }}" class="rounded-circle border border-2" width="120" height="120" style="object-fit:cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center text-white fs-1" style="width:120px;height:120px;">
+                                {{ user[1][0] }}
+                            </div>
+                        {% endif %}
+                        <form action="{{url_for('user.upload_avatar')}}" method="POST" enctype="multipart/form-data" class="mt-3">
+                            <input type="file" name="avatar" accept="image/png,image/jpg,image/jpeg" class="form-control mb-2" required>
+                            <button type="submit" class="btn btn-sm btn-primary">上传更换头像</button>
+                        </form>
+                    </div>
+                    <hr>
+                    <!-- 基础信息展示 -->
+                    <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">用户ID</label>
+                                <p class="form-control bg-light">{{ user[0] }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">当前用户名</label>
+                                <p class="form-control bg-light">{{ user[1] }}</p>
+                            </div>
+                            <div class="col-md-6 mt-3">
+                                <label class="form-label fw-bold">绑定邮箱</label>
+                                <!-- 空邮箱时显示提示文字，避免空白框 -->
+                                <p class="form-control bg-light">
+                                    {% if user[3] %}
+                                        {{ user[3] }}
+                                    {% else %}
+                                        <span class="text-secondary">暂未绑定邮箱</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-6 mt-3">
+                                <label class="form-label fw-bold">账号身份</label>
+                                <p class="form-control bg-light">
+                                    {% if user[4] == 1 %}
+                                    <span class="badge bg-primary">管理员账号</span>
+                                    {% else %}
+                                    普通用户
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    <hr>
+                    <!-- 修改用户名 -->
+                    <h5>修改用户名</h5>
+                    <form action="{{url_for('user.update_name')}}" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">新用户名</label>
+                            <input type="text" name="new_name" class="form-control" required placeholder="输入新用户名">
+                        </div>
+                        <button type="submit" class="btn btn-info">保存新用户名</button>
+                    </form>
+                    <hr>
+                    <!-- 修改密码 -->
+                    <h5>修改密码</h5>
+                    <form action="{{url_for('user.update_pwd')}}" method="POST" class="mb-4">
+                        <div class="mb-3">
+                            <label class="form-label">原密码</label>
+                            <input type="password" name="old_pwd" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">新密码</label>
+                            <input type="password" name="new_pwd" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">确认新密码</label>
+                            <input type="password" name="new_pwd2" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning">保存新密码</button>
+                    </form>
+                    <hr>
+                    <!-- 更换邮箱 -->
+                    <h5>更换绑定邮箱</h5>
+                    <form action="{{url_for('user.update_email')}}" method="POST">
+                        <div class="mb-3 d-flex gap-2">
+                            <input type="email" name="new_email" class="form-control" placeholder="输入新邮箱" required>
+                            <button type="button" id="getCodeBtn" class="btn btn-outline-primary">获取验证码</button>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="email_code" class="form-control" maxlength="6" placeholder="邮箱6位验证码" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">更换邮箱</button>
+                    </form>
+                    <div class="mt-4 text-center">
+                        <a href="{{url_for('c4-log.index')}}" class="btn btn-outline-secondary">返回首页</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== 我发布的日志 移到个人信息卡片下方 ===================== -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">📝 我发布的Log（共 {{ my_blogs|length }} 篇）</h4>
+                </div>
+                <div class="card-body">
+                    {% if my_blogs %}
+                        {% for blog in my_blogs %}
+                        <div class="border rounded p-3 mb-3">
+                            <h5>
+                                <a href="{{ url_for('c4-log.detail', blog_id=blog[0]) }}"
+                                   class="text-decoration-none" style="color: var(--bs-body-color);">
+                                    {{ blog[1] }}
+                                </a>
+                            </h5>
+                           <p class="text-secondary small mb-2">
+                            发布时间：{{ blog[3] if blog[3] else '暂无时间' }}
+                            </p>
+                            <p class="text-break">{{ blog[2]|truncate(120) }}</p>
+                            <div class="d-flex gap-2">
+                                <a href="{{ url_for('c4-log.edit', id=blog[0]) }}" class="btn btn-sm btn-warning">编辑</a>
+                                <a href="{{ url_for('c4-log.delete', id=blog[0]) }}" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该日志？')">删除</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-5 text-secondary">
+                            <p class="fs-5">你还没有发布任何Log</p>
+                            <a href="{{ url_for('c4-log.add') }}" class="btn btn-primary mt-2">去写第一篇Log</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+const btn = document.getElementById("getCodeBtn");
+btn.addEventListener("click", function(){
+    const email = document.querySelector("input[name='new_email']").value.trim();
+    const reg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    if(!reg.test(email)){
+        alert("邮箱格式不正确");
+        return;
+    }
+    fetch(`{{url_for('user.send_email_code_route')}}?email=${email}`)
+    .then(res=>res.json())
+    .then(data=>alert(data.msg))
+    let count = 60;
+    this.disabled = true;
+    const timer = setInterval(()=>{
+        count--;
+        this.textContent = `${count}s重发`;
+        if(count <=0){
+            clearInterval(timer);
+            this.textContent = "获取验证码";
+            this.disabled = false;
+        }
+    },1000)
+})
+</script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

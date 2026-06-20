@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+{% block title %}2026科隆Major - C4-log论坛{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <!-- 导航返回 -->
+    <div class="mb-4">
+        <a href="{{url_for('c4-log.forum')}}" class="btn btn-outline-secondary">← 返回论坛首页</a>
+    </div>
+
+    <!-- 核心信息卡片 -->
+    <div class="card mb-5 shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>{{ major_info.title }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6"><strong>举办时间：</strong>{{ major_info.time }}</div>
+                <div class="col-md-6"><strong>举办地点：</strong>{{ major_info.location }}</div>
+            </div>
+            <div class="mb-3">
+                <strong>赛事项目：</strong>{{ major_info.game }}
+            </div>
+            <div>
+                <strong>核心要点：</strong>
+                <ul class="mt-2">
+                    {% for point in major_info.key_points %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 互动区（预留评论/发帖功能） -->
+    <div class="card">
+        <div class="card-header">
+            <h4>讨论区</h4>
+        </div>
+        <div class="card-body">
+            {% if is_login %}
+                <div class="mb-4">
+                    <textarea class="form-control" rows="3" placeholder="分享你对2026科隆Major的看法..."></textarea>
+                    <button class="btn btn-primary mt-2">发布评论</button>
+                </div>
+                <p class="text-muted">暂无评论，快来抢占沙发！</p>
+            {% else %}
+                <p class="text-center py-3">
+                    <a href="{{url_for('login')}}" class="btn btn-primary">登录后参与讨论</a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block title %}新增log - C4-log{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">新增Log</h2>
+                <form action="{{url_for('c4-log.do_add')}}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">标题</label>
+                        <input type="text" name="title" class="form-control" placeholder="请输入Log标题" required>
+                    </div>
+
+                    {# 仅管理员可见分类选择下拉 #}
+                    {% if is_admin %}
+                    <div class="mb-3">
+                        <label class="form-label">选择分类</label>
+                        <select name="category" class="form-select">
+                            <option value="默认随笔">默认随笔</option>
+                            <option value="Python游戏">Python项目-游戏</option>
+                            <option value="Python工具">Python项目-工具</option>
+                            <option value="Python其他">Python项目-其他</option>
+                            <option value="前端开发">前端开发</option>
+                            <option value="生活记录">生活记录</option>
+                        </select>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label class="form-label">内容</label>
+                        <textarea name="content" rows="15" class="form-control" placeholder="请输入Log内容" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">发布Log</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

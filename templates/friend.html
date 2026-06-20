@@ -1,0 +1,173 @@
+{% extends 'layout.html' %}
+{% block title %}好友管理{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row g-4">
+        <!-- 左侧：好友列表 -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-people"></i> 我的好友</h5>
+                </div>
+                <div class="card-body">
+                    {% if friends %}
+                    <div class="row g-3">
+                        {% for f in friends %}
+                        <div class="col-12 d-flex align-items-center border rounded p-3">
+                            <!-- 头像添加主页跳转链接 -->
+                            <a href="{{ url_for('user.other_profile', visit_uid=f[0]) }}" class="text-decoration-none">
+                                {% if f[2] %}
+                                <img src="{{ url_for('static', filename=f[2]) }}" width="48" height="48" class="rounded-circle me-3" style="object-fit:cover; cursor: pointer;">
+                                {% else %}
+                                <span class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3" style="width:48px;height:48px; cursor: pointer;">
+                                    {{ f[1][0] }}
+                                </span>
+                                {% endif %}
+                            </a>
+                            <!-- 用户名区域添加主页跳转链接 -->
+                            <div class="flex-grow-1">
+                                <a href="{{ url_for('user.other_profile', visit_uid=f[0]) }}" class="text-decoration-none" style="color:var(--bs-body-color);">
+                                    <h6 class="mb-0" style="cursor: pointer;">{{ f[1] }}</h6>
+                                </a>
+                                <span class="text-secondary small">ID：{{ f[0] }}</span>
+                            </div>
+                            <!-- 原有删除按钮保留 -->
+                            <form action="{{url_for('user.del_friend', fid=f[0])}}" method="post" onsubmit="return confirm('确定删除该好友？')">
+                                <button class="btn btn-sm btn-danger">删除</button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-center text-secondary py-4">暂无好友</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- 中间：申请 + 搜索 + 推荐 -->
+        <div class="col-md-8">
+            <!-- 好友申请卡片 -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-envelope"></i> 待处理申请</h5>
+                </div>
+                <div class="card-body">
+                    {% if apply_list %}
+                    {% for item in apply_list %}
+                    <div class="d-flex align-items-center border rounded p-3 mb-3">
+                        <!-- 头像添加主页跳转链接 -->
+                        <a href="{{ url_for('user.other_profile', visit_uid=item[0]) }}" class="text-decoration-none">
+                            {% if item[2] %}
+                            <img src="{{ url_for('static', filename=item[2]) }}" width="40" height="40" class="rounded-circle me-2" style="object-fit:cover; cursor: pointer;">
+                            {% else %}
+                            <span class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width:40px;height:40px; cursor: pointer;">
+                                {{ item[1][0] }}
+                            </span>
+                            {% endif %}
+                        </a>
+                        <!-- 用户名区域添加主页跳转链接 -->
+                        <div class="flex-grow-1">
+                            <a href="{{ url_for('user.other_profile', visit_uid=item[0]) }}" class="text-decoration-none" style="color:var(--bs-body-color);">
+                                <div style="cursor: pointer;">{{ item[1] }}</div>
+                            </a>
+                            <span class="text-secondary small">ID:{{ item[0] }}</span>
+                        </div>
+                        <!-- 原有同意/拒绝按钮保留 -->
+                        <div class="d-flex gap-2">
+                            <form action="{{url_for('user.deal_friend', apply_id=item[3], opt=1)}}" method="post">
+                                <button class="btn btn-sm btn-success">同意</button>
+                            </form>
+                            <form action="{{url_for('user.deal_friend', apply_id=item[3], opt=2)}}" method="post">
+                                <button class="btn btn-sm btn-secondary">拒绝</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="text-center text-secondary py-2">暂无新申请</p>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- 搜索用户模块 -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-search"></i> 搜索用户添加好友</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{url_for('user.search_user')}}" method="get" class="d-flex gap-2 mb-3">
+                        <input type="text" name="kw" class="form-control" placeholder="输入用户名搜索" value="{{kw}}" required>
+                        <button type="submit" class="btn btn-info">搜索</button>
+                    </form>
+                    {% if search_res %}
+                    <h6>搜索结果：</h6>
+                    <div class="row g-3">
+                        {% for u in search_res %}
+                        <div class="col-12 d-flex align-items-center border rounded p-3">
+                            <!-- 头像添加主页跳转链接 -->
+                            <a href="{{ url_for('user.other_profile', visit_uid=u[0]) }}" class="text-decoration-none">
+                                {% if u[2] %}
+                                <img src="{{ url_for('static', filename=u[2]) }}" width="40" height="40" class="rounded-circle me-2" style="object-fit:cover; cursor: pointer;">
+                                {% else %}
+                                <span class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width:40px;height:40px; cursor: pointer;">
+                                    {{ u[1][0] }}
+                                </span>
+                                {% endif %}
+                            </a>
+                            <!-- 用户名区域添加主页跳转链接 -->
+                            <div class="flex-grow-1">
+                                <a href="{{ url_for('user.other_profile', visit_uid=u[0]) }}" class="text-decoration-none" style="color:var(--bs-body-color);">
+                                    <div style="cursor: pointer;">{{ u[1] }}</div>
+                                </a>
+                                <span class="text-secondary small">ID:{{ u[0] }}</span>
+                            </div>
+                            <!-- 原有发送申请按钮保留 -->
+                            <form action="{{url_for('user.send_friend', target_uid=u[0])}}" method="post">
+                                <button class="btn btn-sm btn-outline-primary">发送好友申请</button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% elif kw %}
+                    <p class="text-secondary">未找到匹配用户</p>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- 推荐用户模块 -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-stars"></i> 为你推荐用户</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        {% for rec in recommend %}
+                        <div class="col-12 d-flex align-items-center border rounded p-3">
+                            <!-- 头像添加主页跳转链接 -->
+                            <a href="{{ url_for('user.other_profile', visit_uid=rec[0]) }}" class="text-decoration-none">
+                                {% if rec[2] %}
+                                <img src="{{ url_for('static', filename=rec[2]) }}" width="40" height="40" class="rounded-circle me-2" style="object-fit:cover; cursor: pointer;">
+                                {% else %}
+                                <span class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width:40px;height:40px; cursor: pointer;">
+                                    {{ rec[1][0] }}
+                                </span>
+                                {% endif %}
+                            </a>
+                            <!-- 用户名区域添加主页跳转链接 -->
+                            <div class="flex-grow-1">
+                                <a href="{{ url_for('user.other_profile', visit_uid=rec[0]) }}" class="text-decoration-none" style="color:var(--bs-body-color);">
+                                    <div style="cursor: pointer;">{{ rec[1] }}</div>
+                                </a>
+                                <span class="text-secondary small">ID:{{ rec[0] }}</span>
+                            </div>
+                            <!-- 原有添加好友按钮保留 -->
+                            <form action="{{url_for('user.send_friend', target_uid=rec[0])}}" method="post">
+                                <button class="btn btn-sm btn-outline-success">添加好友</button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

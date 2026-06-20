@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% block title %}用户管理 - C4-log{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card shadow-sm p-4">
+            <h2 class="text-center mb-4">用户管理列表</h2>
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>用户ID</th>
+                            <th>用户名</th>
+                            <th>密码</th>
+                            <!-- 新增：邮箱表头 -->
+                            <th>邮箱</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if users %}
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user[0] }}</td>
+                                <td>{{ user[1] }}</td>
+                                <td>{{ user[2] }}</td>
+                                <!-- 新增：显示邮箱字段（假设user[3]是邮箱字段） -->
+                                <td>{{ user[3] if user[3] else '未填写' }}</td>
+                                <td>
+                                    <a href="{{url_for('user.user_delete', id=user[0])}}"
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('确定删除该用户？')">
+                                        删除
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <!-- 注意：colspan 从 4 改为 5（因为新增了一列） -->
+                                <td colspan="5" class="text-center text-secondary py-4">暂无用户数据</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

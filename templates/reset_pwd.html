@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block title %}重置密码 - C4-log{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-header text-center h4">设置新密码</div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{url_for('c4-log.do_reset_pwd')}}">
+                    <input type="hidden" name="token" value="{{token}}">
+                    <div class="mb-3">
+                        <label class="form-label">新密码</label>
+                        <input type="password" name="pwd" class="form-control" required minlength="6">
+                        <div class="form-text">密码不少于6位</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">确认新密码</label>
+                        <input type="password" name="confirm_pwd" class="form-control" required minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">确认重置密码</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

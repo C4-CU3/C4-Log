@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block title %}论坛 - C4-log{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-5">C4-log 论坛板块</h2>
+    <div class="row g-4">
+        <!-- 2026科隆Major板块 -->
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title text-primary">2026科隆Major</h3>
+                    <p class="card-text">CS2顶级赛事，包含赛程、参赛队伍、奖金池等核心信息</p>
+                    <a href="{{url_for('c4-log.forum_cologne_major_2026')}}" class="btn btn-outline-primary">进入板块</a>
+                </div>
+            </div>
+        </div>
+        <!-- 2026广东中考板块 -->
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title text-success">2026广东中考</h3>
+                    <p class="card-text">政策解读、考试时间、科目分值、备考建议等全攻略</p>
+                    <a href="{{url_for('c4-log.forum_guangdong_zhongkao_2026')}}" class="btn btn-outline-success">进入板块</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

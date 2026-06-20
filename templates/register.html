@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+{% block title %}用户注册 - C4-log{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm mt-4">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">用户注册</h2>
+                {% if error %}
+                <div class="alert alert-danger text-center">
+                    {{ error }}
+                </div>
+                {% endif %}
+                <form action="{{ url_for('user.do_register') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">用户名</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <!-- 邮箱输入框 -->
+                    <div class="mb-3">
+                        <label class="form-label">绑定邮箱</label>
+                        <input type="email" class="form-control" name="email" id="email"
+                               placeholder="请输入你的邮箱" required>
+                    </div>
+                    <!-- 邮箱验证码 -->
+                    <div class="mb-3 d-flex gap-2">
+                        <input type="text" class="form-control flex-grow-1" name="email_code"
+                               placeholder="6位邮箱验证码" maxlength="6" required>
+                        <button type="button" id="getEmailCodeBtn" class="btn btn-outline-primary">获取验证码</button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">设定密码</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">确认密码</label>
+                        <input type="password" class="form-control" id="password2" name="password2" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">注册</button>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('user.login') }}" class="text-decoration-none">已有账户？前往登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 获取邮箱验证码倒计时
+const emailBtn = document.getElementById('getEmailCodeBtn');
+emailBtn.addEventListener('click', function(){
+    const email = document.getElementById('email').value.trim()
+    // 简单邮箱正则校验
+    const reg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+    if(!reg.test(email)){
+        alert("请输入正确的邮箱地址")
+        return
+    }
+    // 请求后端发邮件接口
+    fetch(`{{url_for('user.send_email_code_route')}}?email=${email}`)
+    .then(res=>res.json())
+    .then(data=>alert(data.msg))
+
+    // 60秒倒计时
+    let count = 60
+    this.disabled = true
+    const timer = setInterval(()=>{
+        count--
+        this.textContent = `${count}s重发`
+        if(count <= 0){
+            clearInterval(timer)
+            this.textContent = "获取验证码"
+            this.disabled = false
+        }
+    },1000)
+})
+</script>
+{% endblock %}
